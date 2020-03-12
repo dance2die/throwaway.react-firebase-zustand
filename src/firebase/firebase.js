@@ -9,6 +9,7 @@ class Firebase {
     app.initializeApp(firebaseConfig)
 
     this.auth = app.auth()
+    // https://firebase.google.com/docs/auth/web/auth-state-persistence
     this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL)
 
     this.db = app.database()
