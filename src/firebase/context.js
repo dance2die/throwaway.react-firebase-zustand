@@ -9,11 +9,21 @@ function useFirebase() {
 }
 
 function useUser() {
-  const { auth } = useFirebase()
+  const { auth, db } = useFirebase()
   const [user, setUser] = useState(null)
 
+  const saveUser = user => {
+    setUser(user)
+
+    if (!user) return
+    db.ref(`/users/${user.uid}`).set({
+      email: user.email,
+      username: user.displayName
+    })
+  }
+
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(setUser)
+    const unsubscribe = auth.onAuthStateChanged(saveUser)
     return () => unsubscribe()
   }, [auth])
 

@@ -6,12 +6,23 @@ import logo from './logo.svg'
 import './App.css'
 
 function App() {
-  const { signIn, signOut } = useFirebase()
+  const { signIn, signOut, db } = useFirebase()
   const user = useUser()
 
   useEffect(() => {
     console.info(`user ===>`, user)
   }, [user])
+
+  useEffect(() => {
+    if (!user) return
+
+    const usersRef = db.ref(`/users/${user.uid}`)
+    usersRef.on('value', snapshot => {
+      console.log(`usersRef snapshot`, snapshot.val())
+    })
+
+    return () => usersRef.off()
+  })
 
   return (
     <div className='App'>
